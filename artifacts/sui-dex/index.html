@@ -349,6 +349,161 @@
       /* Buys/Sells */
       #new-pairs-page .np-buys { color: #22c55e; }
       #new-pairs-page .np-sells { color: #ef4444; }
+
+      /* ── Mobile Token Detail Improvements ───────────────────────────── */
+
+      /* Mobile quick stats bar on pair pages */
+      #mob-pair-quickstats {
+        display: none;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        background: hsl(var(--card));
+        border-bottom: 1px solid hsl(var(--border) / 0.4);
+        padding: 0;
+      }
+      #mob-pair-quickstats::-webkit-scrollbar { display: none; }
+      .mob-qs-inner {
+        display: flex;
+        align-items: stretch;
+        min-width: max-content;
+        gap: 0;
+        padding: 10px 14px;
+        gap: 1px;
+      }
+      .mob-qs-item {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        padding: 0 14px 0 0;
+        border-right: 1px solid hsl(var(--border) / 0.3);
+        min-width: 80px;
+      }
+      .mob-qs-item:last-child { border-right: none; padding-right: 0; }
+      .mob-qs-label { font-size: 10px; font-weight: 500; color: hsl(var(--muted-foreground)); text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; }
+      .mob-qs-value { font-size: 13px; font-weight: 700; color: hsl(var(--foreground)); white-space: nowrap; }
+      .mob-qs-value.up { color: #22c55e; }
+      .mob-qs-value.down { color: #ef4444; }
+
+      /* Mobile sticky action bar */
+      #mob-action-bar {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 9998;
+        background: hsl(var(--card));
+        border-top: 1px solid hsl(var(--border) / 0.5);
+        padding: 10px 16px max(10px, env(safe-area-inset-bottom));
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 -4px 24px rgba(0,0,0,0.3);
+      }
+      .mob-act-btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 11px 16px;
+        border-radius: 10px;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        white-space: nowrap;
+        max-width: 200px;
+      }
+      .mob-act-btn:active { opacity: 0.75; }
+      .mob-act-btn.trade { background: linear-gradient(90deg, #09b0ad, #06a09e); color: #fff; box-shadow: 0 2px 12px rgba(9,176,173,0.4); }
+      .mob-act-btn.dscan { background: rgba(99,102,241,0.15); color: #818cf8; border: 1px solid rgba(99,102,241,0.35); }
+      .mob-act-btn.chart { background: rgba(6,182,212,0.12); color: #06b6d4; border: 1px solid rgba(6,182,212,0.3); }
+
+      /* Mobile stats box enhancements */
+      @media (max-width: 768px) {
+        /* Show mobile elements */
+        #mob-pair-quickstats { display: block; }
+        #mob-action-bar { display: flex; }
+
+        /* Pad the bottom of the page for the sticky action bar */
+        #root { padding-bottom: 74px; }
+
+        /* Stats box: full-width grid on mobile */
+        .custom-card { margin-top: 12px; }
+        .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+        .stats-item-value { font-size: 13px; }
+
+        /* Make the injected stats box more compact on mobile */
+        .stats-section { padding: 10px 14px; }
+        .stats-section-label { margin-bottom: 8px; }
+
+        /* New Pairs: card layout on mobile */
+        #new-pairs-page table { min-width: unset !important; }
+        #new-pairs-page .np-table-wrap { overflow-x: auto; }
+        #new-pairs-page thead { display: none; }
+        #new-pairs-page tbody tr {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 4px;
+          padding: 12px 14px;
+          border-top: 1px solid hsl(var(--border) / 0.3);
+          position: relative;
+        }
+        #new-pairs-page td { padding: 0; border-top: none; white-space: nowrap; }
+        #new-pairs-page td:first-child { display: none; }
+        #new-pairs-page td:nth-child(2) { flex: 0 0 100%; margin-bottom: 4px; }
+        #new-pairs-page .np-token { min-width: unset; }
+        /* Price — show */
+        #new-pairs-page td:nth-child(3) { font-size: 14px; font-weight: 700; min-width: 90px; }
+        /* 5m — show */
+        #new-pairs-page td:nth-child(4)::before { content: '5m '; font-size: 10px; color: hsl(var(--muted-foreground)); }
+        /* 1h — show */
+        #new-pairs-page td:nth-child(5)::before { content: '1h '; font-size: 10px; color: hsl(var(--muted-foreground)); }
+        /* 24h — show */
+        #new-pairs-page td:nth-child(6)::before { content: '24h '; font-size: 10px; color: hsl(var(--muted-foreground)); }
+        /* Hide mkt cap, vol, liq, buys/sells on mobile */
+        #new-pairs-page td:nth-child(7),
+        #new-pairs-page td:nth-child(8),
+        #new-pairs-page td:nth-child(9),
+        #new-pairs-page td:nth-child(10) { display: none; }
+        /* Links — full width */
+        #new-pairs-page td:nth-child(11) { flex: 0 0 auto; margin-left: auto; }
+        #new-pairs-page .np-links { justify-content: flex-end; }
+        /* Age */
+        #new-pairs-page td:nth-child(12) { font-size: 11px; }
+
+        /* New pairs banner: stack on mobile */
+        #new-pairs-page .np-banner { flex-direction: column; gap: 14px; padding: 16px; }
+        #new-pairs-page .np-banner-stats { gap: 20px; }
+        #new-pairs-page .np-banner-logo { width: 40px; height: 40px; }
+        #new-pairs-page .np-banner-title { font-size: 18px; }
+
+        /* New pairs navbar */
+        #new-pairs-page .np-navbar { gap: 14px; padding: 12px 0; }
+
+        /* ADS spotlight card: mobile layout */
+        .ads-spotlight-body { flex-direction: column; gap: 12px; }
+        .ads-spotlight-divider { display: none; }
+        .ads-spotlight-right { margin-left: 0; align-items: flex-start; flex-direction: row; gap: 10px; align-items: center; }
+        .ads-spotlight-stats { gap: 12px; }
+
+        /* Chart: ensure minimum height on mobile */
+        #dex-chart-frame { min-height: 260px !important; }
+        #dex-chart-frame iframe { min-height: 260px !important; }
+      }
+
+      @media (max-width: 480px) {
+        .mob-act-btn { font-size: 13px; padding: 10px 12px; }
+        #new-pairs-page td:nth-child(5) { display: none; }
+      }
     </style>
   </head>
   <body>
@@ -1314,6 +1469,151 @@
         return m ? m[1] : null;
       }
 
+      // ── Mobile Token Detail: Quick Stats + Sticky Action Bar ─────────────────
+      var mobQsInjected = null;
+      var mobBarInjected = null;
+
+      function fmtChgMob(val) {
+        if (val == null || isNaN(val)) return { txt: '—', cls: '' };
+        var cls = val > 0 ? 'up' : val < 0 ? 'down' : '';
+        return { txt: (val >= 0 ? '+' : '') + val.toFixed(2) + '%', cls: cls };
+      }
+
+      function fmtPriceMob(s) {
+        var n = parseFloat(s || '0');
+        if (!n) return '$0';
+        if (n >= 1) return '$' + n.toFixed(3);
+        if (n >= 0.001) return '$' + n.toFixed(5);
+        var str = n.toFixed(10).replace(/0+$/, '');
+        return '$' + str;
+      }
+
+      function buildMobileQuickStats(pair) {
+        if (!pair) return '';
+        var priceStr = fmtPriceMob(pair.priceUsd);
+        var chg = fmtChgMob(pair.priceChange && pair.priceChange.h24);
+        var chg1h = fmtChgMob(pair.priceChange && pair.priceChange.h1);
+        var vol = fmtUSD(pair.volume && pair.volume.h24 ? pair.volume.h24 : 0);
+        var liq = fmtUSD(pair.liquidity && pair.liquidity.usd ? pair.liquidity.usd : 0);
+        var mc = pair.marketCap || pair.fdv;
+        var mcStr = mc ? fmtUSD(mc) : '—';
+        var buys = pair.txns && pair.txns.h24 ? (pair.txns.h24.buys || 0) : 0;
+        var sells = pair.txns && pair.txns.h24 ? (pair.txns.h24.sells || 0) : 0;
+
+        return '<div class="mob-qs-inner">' +
+          '<div class="mob-qs-item">' +
+            '<span class="mob-qs-label">Price</span>' +
+            '<span class="mob-qs-value">' + priceStr + '</span>' +
+          '</div>' +
+          '<div class="mob-qs-item">' +
+            '<span class="mob-qs-label">24h %</span>' +
+            '<span class="mob-qs-value ' + chg.cls + '">' + chg.txt + '</span>' +
+          '</div>' +
+          '<div class="mob-qs-item">' +
+            '<span class="mob-qs-label">1h %</span>' +
+            '<span class="mob-qs-value ' + chg1h.cls + '">' + chg1h.txt + '</span>' +
+          '</div>' +
+          '<div class="mob-qs-item">' +
+            '<span class="mob-qs-label">24h Vol</span>' +
+            '<span class="mob-qs-value">' + vol + '</span>' +
+          '</div>' +
+          '<div class="mob-qs-item">' +
+            '<span class="mob-qs-label">Liquidity</span>' +
+            '<span class="mob-qs-value">' + liq + '</span>' +
+          '</div>' +
+          '<div class="mob-qs-item">' +
+            '<span class="mob-qs-label">Mkt Cap</span>' +
+            '<span class="mob-qs-value">' + mcStr + '</span>' +
+          '</div>' +
+          '<div class="mob-qs-item">' +
+            '<span class="mob-qs-label">Buys/Sells</span>' +
+            '<span class="mob-qs-value"><span style="color:#22c55e">' + buys + '</span>/<span style="color:#ef4444">' + sells + '</span></span>' +
+          '</div>' +
+        '</div>';
+      }
+
+      async function injectMobilePairExtras(pairAddress) {
+        if (mobQsInjected === pairAddress && document.getElementById('mob-pair-quickstats')) return;
+
+        // Remove old elements
+        var oldQs = document.getElementById('mob-pair-quickstats');
+        if (oldQs) oldQs.remove();
+        var oldBar = document.getElementById('mob-action-bar');
+        if (oldBar) oldBar.remove();
+        mobQsInjected = null;
+        mobBarInjected = null;
+
+        // Find the root container to anchor to
+        var root2 = document.getElementById('root');
+        if (!root2 || root2.children.length === 0) return;
+
+        // Fetch pair data from the tokens list API
+        var pairData = null;
+        try {
+          var resp = await fetch('/api/tokens');
+          if (resp.ok) {
+            var allPairs = await resp.json();
+            if (Array.isArray(allPairs)) {
+              pairData = allPairs.find(function(p) {
+                return p.pairAddress && p.pairAddress.toLowerCase() === pairAddress.toLowerCase();
+              }) || null;
+            }
+          }
+        } catch (e) { /* ignore */ }
+
+        if (mobQsInjected === pairAddress) return; // navigation happened while fetching
+
+        // Build quick stats bar
+        var qs = document.createElement('div');
+        qs.id = 'mob-pair-quickstats';
+        qs.innerHTML = pairData ? buildMobileQuickStats(pairData) :
+          '<div class="mob-qs-inner"><div class="mob-qs-item" style="min-width:unset;color:hsl(var(--muted-foreground));font-size:12px">Loading stats…</div></div>';
+
+        // Insert at very top of root
+        root2.insertBefore(qs, root2.firstChild);
+        mobQsInjected = pairAddress;
+
+        // Build sticky action bar
+        var SUI_ADDR = '0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI';
+        var tradeUrl = '#';
+        var dscanUrl = 'https://suiscan.xyz/mainnet/object/' + pairAddress;
+
+        if (pairData) {
+          var baseAddr = pairData.baseToken && pairData.baseToken.address ? pairData.baseToken.address : '';
+          if (pairData.raidenSlug) {
+            tradeUrl = 'https://www.raidenx.io/' + pairData.raidenSlug;
+          } else {
+            tradeUrl = 'https://app.cetus.zone/swap?from=' + encodeURIComponent(SUI_ADDR) + '&to=' + encodeURIComponent(baseAddr);
+            if (pairAddress) tradeUrl += '&poolAddress=' + encodeURIComponent(pairAddress);
+          }
+        }
+
+        var bar = document.createElement('div');
+        bar.id = 'mob-action-bar';
+        bar.innerHTML =
+          '<a class="mob-act-btn trade" href="' + tradeUrl + '" target="_blank" rel="noopener">' +
+            '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>' +
+            'Trade' +
+          '</a>' +
+          '<a class="mob-act-btn dscan" href="' + dscanUrl + '" target="_blank" rel="noopener">' +
+            '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>' +
+            'SuiScan' +
+          '</a>';
+
+        document.body.appendChild(bar);
+        mobBarInjected = pairAddress;
+      }
+
+      function removeMobilePairExtras() {
+        var qs = document.getElementById('mob-pair-quickstats');
+        if (qs) qs.remove();
+        var bar = document.getElementById('mob-action-bar');
+        if (bar) bar.remove();
+        mobQsInjected = null;
+        mobBarInjected = null;
+      }
+      // ── End Mobile Token Detail ───────────────────────────────────────────────
+
       function check() {
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(function () {
@@ -1364,6 +1664,13 @@
 
           // Admin contact (Advertise) link on pair pages
           injectAdminContactLink();
+
+          // Mobile enhancements for pair detail pages
+          if (pair) {
+            injectMobilePairExtras(pair);
+          } else {
+            removeMobilePairExtras();
+          }
         }, 150);
       }
 
@@ -1384,6 +1691,9 @@
         adminContactInjected = false;
         newPairsNavInjected = false;
         newPairsPageActive = false;
+        mobQsInjected = null;
+        mobBarInjected = null;
+        removeMobilePairExtras();
         check();
       };
       window.addEventListener('popstate', function () {
@@ -1394,6 +1704,9 @@
         adminContactInjected = false;
         newPairsNavInjected = false;
         newPairsPageActive = false;
+        mobQsInjected = null;
+        mobBarInjected = null;
+        removeMobilePairExtras();
         check();
       });
 
