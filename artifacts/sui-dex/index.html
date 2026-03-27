@@ -404,6 +404,49 @@
       /* Buys/Sells */
       #new-pairs-page .np-buys { color: #22c55e; }
       #new-pairs-page .np-sells { color: #ef4444; }
+
+      /* ── Site logo override ── */
+      #site-logo-img {
+        width: 32px; height: 32px; border-radius: 50%; object-fit: cover;
+        box-shadow: 0 0 8px rgba(59,130,246,0.5);
+      }
+
+      /* ── Nav menu button + dropdown ── */
+      #site-nav-menu {
+        position: relative; display: flex; align-items: center;
+      }
+      #site-nav-menu-btn {
+        display: flex; align-items: center; gap: 6px;
+        background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.3);
+        color: hsl(var(--foreground)); border-radius: 8px;
+        padding: 5px 11px; font-size: 13px; font-weight: 500;
+        cursor: pointer; transition: background 0.18s, border-color 0.18s;
+        white-space: nowrap;
+      }
+      #site-nav-menu-btn:hover { background: rgba(99,102,241,0.22); border-color: rgba(99,102,241,0.55); }
+      #site-nav-menu-btn svg { flex-shrink: 0; }
+      #site-nav-dropdown {
+        position: absolute; top: calc(100% + 8px); right: 0;
+        min-width: 180px; z-index: 9999;
+        background: hsl(var(--card)); border: 1px solid hsl(var(--border));
+        border-radius: 10px; box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+        padding: 6px; display: none; flex-direction: column; gap: 2px;
+      }
+      #site-nav-dropdown.open { display: flex; }
+      .snav-item {
+        display: flex; align-items: center; gap: 9px;
+        padding: 8px 12px; border-radius: 7px; font-size: 13px; font-weight: 500;
+        color: hsl(var(--foreground)); text-decoration: none;
+        transition: background 0.15s;
+      }
+      .snav-item:hover { background: hsl(var(--muted)/0.6); }
+      .snav-item svg { flex-shrink: 0; }
+      .snav-divider { height: 1px; background: hsl(var(--border)); margin: 4px 8px; }
+      .snav-label {
+        font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+        color: hsl(var(--muted-foreground)); padding: 4px 12px 2px;
+        text-transform: uppercase;
+      }
     </style>
   </head>
   <body>
@@ -417,6 +460,93 @@
 
       var injectedPair = null;
       var injectedChart = null;
+
+      // ── Site logo + menu injection ──────────────────────────────────────────
+      var navLogoInjected = false;
+      var navMenuInjected = false;
+
+      function injectSiteLogo() {
+        if (navLogoInjected && document.getElementById('site-logo-img')) return;
+        var brandImg = document.querySelector('header img[alt="SUI"]');
+        if (!brandImg) return;
+        var img = document.createElement('img');
+        img.id = 'site-logo-img';
+        img.src = '/logo.jpg';
+        img.alt = 'SUI DEX Screener';
+        var container = brandImg.parentElement;
+        if (container) {
+          container.innerHTML = '';
+          container.appendChild(img);
+        }
+        navLogoInjected = true;
+      }
+
+      function injectNavMenu() {
+        if (navMenuInjected && document.getElementById('site-nav-menu')) return;
+        var old = document.getElementById('site-nav-menu');
+        if (old) old.remove();
+        navMenuInjected = false;
+
+        // Anchor after the search bar container (right side of header)
+        var header = document.querySelector('header');
+        if (!header) return;
+
+        // Find search bar container (has flex-1 and max-w-md)
+        var searchWrap = null;
+        var all = header.querySelectorAll('div');
+        for (var i = 0; i < all.length; i++) {
+          var cl = all[i].className || '';
+          if (cl.indexOf('flex-1') !== -1 && cl.indexOf('max-w-md') !== -1) {
+            searchWrap = all[i]; break;
+          }
+        }
+        if (!searchWrap) return;
+
+        var menu = document.createElement('div');
+        menu.id = 'site-nav-menu';
+        menu.innerHTML =
+          '<button id="site-nav-menu-btn" title="Menu">' +
+            '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>' +
+            '<span>Menu</span>' +
+          '</button>' +
+          '<div id="site-nav-dropdown">' +
+            '<div class="snav-label">Trade</div>' +
+            '<a class="snav-item" href="https://app.suidex.fun" target="_blank" rel="noopener">' +
+              '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>' +
+              'Swap' +
+            '</a>' +
+            '<div class="snav-divider"></div>' +
+            '<div class="snav-label">Community</div>' +
+            '<a class="snav-item" href="https://t.me/suidexscreenerchat" target="_blank" rel="noopener">' +
+              '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>' +
+              'Telegram' +
+            '</a>' +
+            '<a class="snav-item" href="https://x.com/suidexscreener" target="_blank" rel="noopener">' +
+              '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.766l7.73-8.835L1.254 2.25H8.08l4.265 5.638L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>' +
+              'X (Twitter)' +
+            '</a>' +
+          '</div>';
+
+        var parent = searchWrap.parentNode;
+        if (parent) {
+          parent.insertBefore(menu, searchWrap.nextSibling);
+          navMenuInjected = true;
+        }
+
+        // Toggle dropdown on button click
+        var btn = menu.querySelector('#site-nav-menu-btn');
+        var drop = menu.querySelector('#site-nav-dropdown');
+        if (btn && drop) {
+          btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            drop.classList.toggle('open');
+          });
+          document.addEventListener('click', function () {
+            drop.classList.remove('open');
+          });
+        }
+      }
+      // ── End site logo + menu ─────────────────────────────────────────────────
       var debounceTimer = null;
       var chartTimer = null;
 
@@ -1376,6 +1506,10 @@
           var isAdmin = /\/admin/.test(window.location.pathname);
           var isNewPairs = isNewPairsURL();
 
+          // Always inject site logo and menu
+          injectSiteLogo();
+          injectNavMenu();
+
           // Always inject the New Pairs nav link
           injectNewPairsNav();
 
@@ -1439,6 +1573,7 @@
         adminContactInjected = false;
         newPairsNavInjected = false;
         newPairsPageActive = false;
+        navMenuInjected = false;
         check();
       };
       window.addEventListener('popstate', function () {
@@ -1449,6 +1584,7 @@
         adminContactInjected = false;
         newPairsNavInjected = false;
         newPairsPageActive = false;
+        navMenuInjected = false;
         check();
       });
 
