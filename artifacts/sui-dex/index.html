@@ -498,11 +498,98 @@
         /* Chart: ensure minimum height on mobile */
         #dex-chart-frame { min-height: 260px !important; }
         #dex-chart-frame iframe { min-height: 260px !important; }
+
+        /* ── Pair detail header: fix layout on mobile ── */
+
+        /* Stack the header (token info + price) vertically */
+        body[data-pair-page] .flex.flex-wrap.items-start.justify-between.gap-4 {
+          flex-direction: column !important;
+          gap: 10px !important;
+          align-items: stretch !important;
+        }
+
+        /* Price + actions section: left-align when stacked */
+        body[data-pair-page] .flex.flex-col.items-end.gap-2 {
+          align-items: flex-start !important;
+          width: 100% !important;
+        }
+
+        /* Price text: left-aligned, properly sized */
+        body[data-pair-page] .text-3xl.font-bold.font-mono.tracking-tight {
+          font-size: 1.85rem !important;
+          line-height: 1.15 !important;
+          word-break: break-all;
+        }
+
+        /* 24h change row: left align */
+        body[data-pair-page] .flex.items-center.gap-1.text-sm {
+          justify-content: flex-start !important;
+        }
+
+        /* Market cap label: left-align */
+        body[data-pair-page] .text-xs.text-muted-foreground.text-right {
+          text-align: left !important;
+          font-size: 12px !important;
+        }
+
+        /* Trade button: full width */
+        body[data-pair-page] .flex.flex-col.items-end.gap-2 > a {
+          width: 100% !important;
+        }
+        body[data-pair-page] .flex.flex-col.items-end.gap-2 > a > button {
+          width: 100% !important;
+          justify-content: center !important;
+          height: 38px !important;
+          font-size: 13px !important;
+        }
+
+        /* Token name + symbol: allow wrap, prevent overflow */
+        body[data-pair-page] .flex.items-start.gap-3 {
+          min-width: 0;
+          overflow: hidden;
+        }
+        body[data-pair-page] .flex.items-start.gap-3 > div:not(.relative) {
+          min-width: 0;
+          flex: 1;
+          overflow: hidden;
+        }
+
+        /* Token name heading: wrap and truncate gracefully */
+        body[data-pair-page] h1, body[data-pair-page] h2 {
+          font-size: 1.1rem !important;
+          white-space: normal !important;
+          overflow-wrap: break-word !important;
+          word-break: break-word !important;
+          line-height: 1.3 !important;
+        }
+
+        /* Social link buttons: wrap nicely */
+        body[data-pair-page] .flex.items-center.gap-2.flex-wrap,
+        body[data-pair-page] .flex.items-center.gap-1\\.5 {
+          flex-wrap: wrap !important;
+          gap: 6px !important;
+        }
+
+        /* Address row: allow wrap */
+        body[data-pair-page] .flex.items-center.gap-3.text-sm.flex-wrap {
+          flex-wrap: wrap !important;
+          gap: 6px !important;
+        }
+
+        /* Sidebar stats (Token Stats panel) - full width on mobile */
+        body[data-pair-page] .lg\:col-span-1 {
+          grid-column: 1 / -1 !important;
+        }
       }
 
       @media (max-width: 480px) {
         .mob-act-btn { font-size: 13px; padding: 10px 12px; }
         #new-pairs-page td:nth-child(5) { display: none; }
+
+        /* Smaller price on very narrow screens */
+        body[data-pair-page] .text-3xl.font-bold.font-mono.tracking-tight {
+          font-size: 1.5rem !important;
+        }
       }
     </style>
   </head>
@@ -1481,11 +1568,12 @@
 
       function fmtPriceMob(s) {
         var n = parseFloat(s || '0');
-        if (!n) return '$0';
-        if (n >= 1) return '$' + n.toFixed(3);
-        if (n >= 0.001) return '$' + n.toFixed(5);
-        var str = n.toFixed(10).replace(/0+$/, '');
-        return '$' + str;
+        if (!n || isNaN(n)) return '$0.00';
+        if (n < 1e-5) return '$' + n.toFixed(8);
+        if (n < 0.01)  return '$' + n.toFixed(6);
+        if (n < 1)     return '$' + n.toFixed(4);
+        if (n > 1000)  return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        return '$' + n.toFixed(2);
       }
 
       function buildMobileQuickStats(pair) {
@@ -1614,10 +1702,21 @@
       }
       // ── End Mobile Token Detail ───────────────────────────────────────────────
 
+      function setPairPageBodyAttr(isPair) {
+        if (isPair) {
+          document.body.setAttribute('data-pair-page', '1');
+        } else {
+          document.body.removeAttribute('data-pair-page');
+        }
+      }
+
       function check() {
         clearTimeout(debounceTimer);
+        // Set body attribute immediately (no debounce) so CSS applies instantly
+        setPairPageBodyAttr(!!getPairFromURL());
         debounceTimer = setTimeout(function () {
           var pair = getPairFromURL();
+          setPairPageBodyAttr(!!pair);
           var isAdmin = /\/admin/.test(window.location.pathname);
           var isNewPairs = isNewPairsURL();
 
