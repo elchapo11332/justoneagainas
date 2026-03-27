@@ -499,101 +499,119 @@
         #dex-chart-frame { min-height: 260px !important; }
         #dex-chart-frame iframe { min-height: 260px !important; }
 
-        /* ── Pair detail header: mobile layout ── */
-
-        /* Stack the whole header flex column and center everything */
-        body[data-pair-page] .flex.flex-wrap.items-start.justify-between.gap-4 {
-          flex-direction: column !important;
-          align-items: center !important;
-          gap: 10px !important;
-          text-align: center !important;
-        }
-
-        /* Token info left section: center */
-        body[data-pair-page] .flex.items-start.gap-3 {
-          flex-direction: column !important;
-          align-items: center !important;
-          width: 100% !important;
-          gap: 8px !important;
-        }
-        body[data-pair-page] .flex.items-start.gap-3 > div:not(.relative) {
-          display: flex !important;
-          flex-direction: column !important;
-          align-items: center !important;
-          min-width: 0;
-          width: 100%;
-        }
-
-        /* Token name: centered, wrap */
-        body[data-pair-page] h1, body[data-pair-page] h2 {
-          font-size: 1.1rem !important;
-          white-space: normal !important;
-          word-break: break-word !important;
-          line-height: 1.3 !important;
-          text-align: center !important;
-        }
-
-        /* Social buttons: center */
-        body[data-pair-page] .flex.items-center.gap-2.flex-wrap {
-          justify-content: center !important;
-          flex-wrap: wrap !important;
-        }
-
-        /* Address row: center and wrap */
-        body[data-pair-page] .flex.items-center.gap-3.text-sm.flex-wrap {
-          justify-content: center !important;
-          flex-wrap: wrap !important;
-          gap: 6px !important;
-        }
-
-        /* HIDE price, 24h change, and Mkt Cap from header on mobile
-           (these are already visible in the quick stats bar below) */
-        body[data-pair-page] .text-3xl.font-bold.font-mono.tracking-tight {
-          display: none !important;
-        }
-        body[data-pair-page] .flex.flex-col.items-end.gap-2 > div {
-          display: none !important;
-        }
-
-        /* Price + actions section: center, full-width */
-        body[data-pair-page] .flex.flex-col.items-end.gap-2 {
-          align-items: center !important;
-          width: 100% !important;
-        }
-
-        /* Trade button: full width, centered */
-        body[data-pair-page] .flex.flex-col.items-end.gap-2 > a {
-          width: 100% !important;
-        }
-        body[data-pair-page] .flex.flex-col.items-end.gap-2 > a > button {
-          width: 100% !important;
-          justify-content: center !important;
-          height: 40px !important;
-          font-size: 14px !important;
-        }
-
-        /* Advertise link: full width, centered */
-        body[data-pair-page] .flex.flex-col.items-end.gap-2 > div:last-child {
-          display: flex !important;
-          justify-content: center !important;
-          width: 100% !important;
-        }
-
-        /* Sidebar stats (Token Stats panel) - full width on mobile */
-        body[data-pair-page] .lg\:col-span-1 {
-          grid-column: 1 / -1 !important;
-        }
+        /* Show custom header, hide React header on pair pages */
+        #mob-pair-header { display: block; }
+        body[data-pair-page] .mob-react-hdr { display: none !important; }
       }
 
       @media (max-width: 480px) {
         .mob-act-btn { font-size: 13px; padding: 10px 12px; }
         #new-pairs-page td:nth-child(5) { display: none; }
-
-        /* Smaller price on very narrow screens */
-        body[data-pair-page] .text-3xl.font-bold.font-mono.tracking-tight {
-          font-size: 1.5rem !important;
-        }
+        .mph-price { font-size: 1.4rem !important; }
       }
+
+      /* ── Custom Mobile Pair Header ── */
+      #mob-pair-header {
+        display: none;
+        background: hsl(var(--card));
+        border: 1px solid hsl(var(--border) / 0.5);
+        border-radius: 16px;
+        padding: 16px;
+        margin: 6px 8px 0;
+      }
+      .mph-top-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+      .mph-logo {
+        width: 52px; height: 52px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+      }
+      .mph-logo-fallback {
+        width: 52px; height: 52px;
+        border-radius: 50%;
+        background: hsl(var(--muted));
+        display: flex; align-items: center; justify-content: center;
+        font-size: 22px; font-weight: 700;
+        color: hsl(var(--foreground));
+        flex-shrink: 0;
+      }
+      .mph-name-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+      .mph-name { font-size: 1.05rem; font-weight: 700; color: hsl(var(--foreground)); }
+      .mph-name-sep { color: hsl(var(--muted-foreground)); }
+      .mph-badge {
+        font-size: 11px; font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 6px;
+        background: rgba(99,102,241,0.15);
+        color: #818cf8;
+        border: 1px solid rgba(99,102,241,0.3);
+        text-transform: capitalize;
+      }
+      .mph-price-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 14px;
+      }
+      .mph-price-left { display: flex; flex-direction: column; gap: 4px; }
+      .mph-price {
+        font-size: 1.75rem; font-weight: 800;
+        font-family: 'Courier New', monospace;
+        color: hsl(var(--foreground));
+        letter-spacing: -0.02em;
+        line-height: 1;
+      }
+      .mph-chg { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 3px; }
+      .mph-chg.up { color: #22c55e; }
+      .mph-chg.down { color: #ef4444; }
+      .mph-price-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 3px;
+      }
+      .mph-mc-label {
+        font-size: 10px; font-weight: 500;
+        text-transform: uppercase; letter-spacing: 0.06em;
+        color: hsl(var(--muted-foreground));
+      }
+      .mph-mc-val {
+        font-size: 15px; font-weight: 700;
+        color: hsl(var(--foreground));
+        font-family: 'Courier New', monospace;
+      }
+      .mph-socials { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+      .mph-soc-btn {
+        font-size: 12px; font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 8px;
+        border: 1px solid hsl(var(--border) / 0.6);
+        color: hsl(var(--foreground));
+        text-decoration: none;
+        background: hsl(var(--muted) / 0.3);
+        display: inline-flex; align-items: center; gap: 4px;
+      }
+      .mph-addr-row {
+        display: flex; align-items: center;
+        gap: 10px; margin-bottom: 14px; flex-wrap: wrap;
+      }
+      .mph-addr { font-size: 11px; font-family: monospace; color: hsl(var(--muted-foreground)); }
+      .mph-suiscan { font-size: 11px; color: hsl(var(--primary)); text-decoration: none; }
+      .mph-trade-btn {
+        display: flex; align-items: center; justify-content: center; gap: 6px;
+        width: 100%; padding: 13px;
+        border-radius: 10px;
+        background: #3DD68C; color: #000;
+        font-size: 14px; font-weight: 700;
+        text-decoration: none; margin-top: 2px;
+        transition: opacity 0.15s;
+      }
+      .mph-trade-btn:active { opacity: 0.8; }
     </style>
   </head>
   <body>
@@ -1562,6 +1580,7 @@
       // ── Mobile Token Detail: Quick Stats + Sticky Action Bar ─────────────────
       var mobQsInjected = null;
       var mobBarInjected = null;
+      var mobHdrInjected = null;
 
       function fmtChgMob(val) {
         if (val == null || isNaN(val)) return { txt: '—', cls: '' };
@@ -1577,6 +1596,79 @@
         if (n < 1)     return '$' + n.toFixed(4);
         if (n > 1000)  return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         return '$' + n.toFixed(2);
+      }
+
+      function buildMobilePairHeader(pair) {
+        if (!pair) return '';
+        var symbol   = (pair.baseToken && pair.baseToken.symbol) || '?';
+        var quote    = (pair.quoteToken && pair.quoteToken.symbol) || 'SUI';
+        var dexId    = pair.dexId || '';
+        var dexLabel = dexId === 'cetus' ? 'Cetus' : dexId === 'turbos-finance' ? 'Turbos' : dexId === 'flowx-finance' ? 'FlowX' : dexId;
+        var logoUrl  = (pair.baseToken && pair.baseToken.logoUrl) || '';
+        var price    = fmtPriceMob(pair.priceUsd);
+        var mc       = fmtUSD(pair.marketCap || pair.fdv || 0);
+        var chg      = fmtChgMob(pair.priceChange && pair.priceChange.h24);
+        var addr     = (pair.baseToken && pair.baseToken.address) || '';
+        var addrShort = addr ? (addr.slice(0, 8) + '...' + addr.slice(-4)) : '';
+        var suiscanUrl = 'https://suiscan.xyz/mainnet/object/' + (pair.pairAddress || '');
+
+        // Social links
+        var socials = '';
+        var websites = pair.baseToken && pair.baseToken.websites;
+        if (websites && websites.length) {
+          socials += '<a href="' + websites[0].url + '" target="_blank" rel="noopener" class="mph-soc-btn">🌐 Website</a>';
+        }
+        var pairSocials = pair.baseToken && pair.baseToken.socials;
+        if (pairSocials && pairSocials.length) {
+          for (var si = 0; si < pairSocials.length; si++) {
+            var s = pairSocials[si];
+            if (s.type === 'twitter') socials += '<a href="' + s.url + '" target="_blank" rel="noopener" class="mph-soc-btn">𝕏 Twitter</a>';
+            if (s.type === 'telegram') socials += '<a href="' + s.url + '" target="_blank" rel="noopener" class="mph-soc-btn">TG</a>';
+          }
+        }
+
+        // Trade URL
+        var SUI_ADDR = '0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI';
+        var baseAddr = addr;
+        var tradeUrl = '#';
+        if (pair.raidenSlug) {
+          tradeUrl = 'https://www.raidenx.io/' + pair.raidenSlug;
+        } else if (baseAddr) {
+          tradeUrl = 'https://app.cetus.zone/swap?from=' + encodeURIComponent(SUI_ADDR) + '&to=' + encodeURIComponent(baseAddr);
+          if (pair.pairAddress) tradeUrl += '&poolAddress=' + encodeURIComponent(pair.pairAddress);
+        }
+
+        var logoHtml = logoUrl
+          ? '<img src="' + logoUrl + '" class="mph-logo" onerror="this.style.display=\'none\'">'
+          : '<div class="mph-logo-fallback">' + symbol.charAt(0) + '</div>';
+
+        var chgArrow = chg.cls === 'up' ? '▲' : chg.cls === 'down' ? '▼' : '';
+
+        return (
+          '<div class="mph-top-row">' +
+            '<div class="mph-logo-wrap">' + logoHtml + '</div>' +
+            '<div class="mph-name-wrap">' +
+              '<span class="mph-name">' + symbol + ' <span class="mph-name-sep">/</span> ' + quote + '</span>' +
+              '<span class="mph-badge">' + dexLabel + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="mph-price-row">' +
+            '<div class="mph-price-left">' +
+              '<span class="mph-price">' + price + '</span>' +
+              (chg.txt !== '—' ? '<span class="mph-chg ' + chg.cls + '">' + chgArrow + ' ' + chg.txt + ' <span style="font-weight:400;opacity:0.6">24h</span></span>' : '') +
+            '</div>' +
+            '<div class="mph-price-right">' +
+              '<span class="mph-mc-label">Market Cap</span>' +
+              '<span class="mph-mc-val">' + mc + '</span>' +
+            '</div>' +
+          '</div>' +
+          (socials ? '<div class="mph-socials">' + socials + '</div>' : '') +
+          (addrShort ? '<div class="mph-addr-row"><span class="mph-addr">' + addrShort + '</span><a href="' + suiscanUrl + '" target="_blank" rel="noopener" class="mph-suiscan">SuiScan ↗</a></div>' : '') +
+          '<a href="' + tradeUrl + '" target="_blank" rel="noopener" class="mph-trade-btn">' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>' +
+            ' Trade on ' + dexLabel +
+          '</a>'
+        );
       }
 
       function buildMobileQuickStats(pair) {
@@ -1623,16 +1715,37 @@
         '</div>';
       }
 
+      function markReactPairHeader() {
+        // Find the pair header flex container in the React DOM
+        var flex = document.querySelector('.flex.flex-wrap.items-start.justify-between.gap-4');
+        if (!flex) return;
+        // Walk up to find the card element (has p-4 class)
+        var el = flex.parentElement;
+        while (el && el !== document.body) {
+          if (el.className && typeof el.className === 'string' && el.className.indexOf('p-4') !== -1) {
+            el.classList.add('mob-react-hdr');
+            return;
+          }
+          el = el.parentElement;
+        }
+      }
+
       async function injectMobilePairExtras(pairAddress) {
         if (mobQsInjected === pairAddress && document.getElementById('mob-pair-quickstats')) return;
 
         // Remove old elements
+        var oldHdr = document.getElementById('mob-pair-header');
+        if (oldHdr) oldHdr.remove();
         var oldQs = document.getElementById('mob-pair-quickstats');
         if (oldQs) oldQs.remove();
         var oldBar = document.getElementById('mob-action-bar');
         if (oldBar) oldBar.remove();
+        // Remove the React header marker
+        var oldMarked = document.querySelector('.mob-react-hdr');
+        if (oldMarked) oldMarked.classList.remove('mob-react-hdr');
         mobQsInjected = null;
         mobBarInjected = null;
+        mobHdrInjected = null;
 
         // Find the root container to anchor to
         var root2 = document.getElementById('root');
@@ -1654,14 +1767,30 @@
 
         if (mobQsInjected === pairAddress) return; // navigation happened while fetching
 
+        // Inject custom mobile pair header (replaces React header on mobile)
+        if (pairData) {
+          var hdr = document.createElement('div');
+          hdr.id = 'mob-pair-header';
+          hdr.innerHTML = buildMobilePairHeader(pairData);
+          root2.insertBefore(hdr, root2.firstChild);
+          mobHdrInjected = pairAddress;
+          // Mark the React header so CSS can hide it on mobile
+          setTimeout(markReactPairHeader, 300);
+        }
+
         // Build quick stats bar
         var qs = document.createElement('div');
         qs.id = 'mob-pair-quickstats';
         qs.innerHTML = pairData ? buildMobileQuickStats(pairData) :
           '<div class="mob-qs-inner"><div class="mob-qs-item" style="min-width:unset;color:hsl(var(--muted-foreground));font-size:12px">Loading stats…</div></div>';
 
-        // Insert at very top of root
-        root2.insertBefore(qs, root2.firstChild);
+        // Insert below the custom header (or at top if no header)
+        var hdrEl = document.getElementById('mob-pair-header');
+        if (hdrEl && hdrEl.nextSibling) {
+          root2.insertBefore(qs, hdrEl.nextSibling);
+        } else {
+          root2.insertBefore(qs, root2.firstChild);
+        }
         mobQsInjected = pairAddress;
 
         // Build sticky action bar
