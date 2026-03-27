@@ -211,6 +211,61 @@
       .admin-contact-link:hover { background: rgba(41,182,246,0.2); border-color: rgba(41,182,246,0.6); }
       /* ── Hide Admin nav link ── */
       a[href="/admin"], a[href="/admin/"] { display: none !important; }
+
+      /* ── Token Detail: Mobile Layout ── */
+      /* On mobile: token (left) | price (right) / mkt cap below */
+      @media (max-width: 640px) {
+        /* Prevent the header from wrapping — keep token left, price right */
+        div:has(> div.flex > .text-3xl.font-mono) {
+          flex-wrap: nowrap !important;
+          align-items: flex-start !important;
+          gap: 8px !important;
+        }
+
+        /* Left section: take remaining space, don't overflow */
+        div:has(> div.flex > .text-3xl.font-mono) > div:first-child {
+          flex: 1 1 0 !important;
+          min-width: 0 !important;
+          overflow: hidden !important;
+        }
+
+        /* Truncate token name if too long */
+        div:has(> div.flex > .text-3xl.font-mono) h1 {
+          white-space: nowrap !important;
+          overflow: hidden !important;
+          text-overflow: ellipsis !important;
+          max-width: 140px !important;
+        }
+
+        /* Hide address + external links row on mobile (saves space) */
+        div:has(> div.flex > .text-3xl.font-mono) > div:first-child .text-muted-foreground.flex {
+          display: none !important;
+        }
+
+        /* Right section: price + mkt cap, don't shrink */
+        div:has(> div.flex > .text-3xl.font-mono) > div.flex.flex-col {
+          flex-shrink: 0 !important;
+          min-width: fit-content !important;
+          align-items: flex-end !important;
+        }
+
+        /* Scale down large price on mobile */
+        div:has(> div.flex > .text-3xl.font-mono) .text-3xl {
+          font-size: 1.15rem !important;
+          line-height: 1.5rem !important;
+        }
+
+        /* Market cap — keep visible below price */
+        div:has(> div.flex > .text-3xl.font-mono) .text-xs.text-muted-foreground.text-right {
+          white-space: nowrap !important;
+        }
+
+        /* Trade + Advertise buttons: stack below, full width on mobile */
+        div:has(> div.flex > .text-3xl.font-mono) > div.flex.flex-col > a {
+          width: 100% !important;
+          justify-content: center !important;
+        }
+      }
       /* ── New Pairs nav link ── */
       .new-pairs-nav-link {
         font-size: 14px; font-weight: 500; color: hsl(var(--foreground) / 0.7);
